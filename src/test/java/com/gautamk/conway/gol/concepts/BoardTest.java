@@ -63,12 +63,97 @@ class BoardTest {
     @Test
     void testValidGetLazyInitialization() {
         for (int x = 0; x < width; x++) {
-            for(int y=0;y<height;y++){
+            for (int y = 0; y < height; y++) {
                 Cell randomCell = this.board.get(x, y);
                 assertNotNull(randomCell);
                 assertFalse(randomCell.isAlive());
             }
         }
-        assertEquals(width*height, board.getBoardMap().size());
+        assertEquals(width * height, board.getBoardMap().size());
+    }
+
+    @Test
+    void testInvalidGet() {
+        assertThrows(IllegalArgumentException.class, () -> this.board.get(width, height - 2));
+        assertThrows(IllegalArgumentException.class, () -> this.board.get(width - 2, height));
+        assertThrows(IllegalArgumentException.class, () -> this.board.get(-1, 0));
+        assertThrows(IllegalArgumentException.class, () -> this.board.get(0, -1));
+    }
+
+
+    @Test
+    void testValidGetLeftNeighbor() {
+        int x = 5;
+        int y = 5;
+        Cell expected = this.board.get(x - 1, y);
+        Cell actual = this.board.getLeftNeighbor(x, y);
+        assertSame(expected, actual);
+    }
+
+    @Test
+    void testValidGetRightNeighbor() {
+        int x = 5;
+        int y = 5;
+        Cell expected = this.board.get(x + 1, y);
+        Cell actual = this.board.getRightNeighbor(x, y);
+        assertSame(expected, actual);
+    }
+
+    @Test
+    void testValidGetTopNeighbor() {
+        int x = 5;
+        int y = 5;
+        Cell expected = this.board.get(x, y - 1);
+        Cell actual = this.board.getTopNeighbor(x, y);
+        assertSame(expected, actual);
+    }
+
+    @Test
+    void testValidGetBottomNeighbor() {
+        int x = 5;
+        int y = 5;
+        Cell expected = this.board.get(x, y + 1);
+        Cell actual = this.board.getBottomNeighbor(x, y);
+        assertSame(expected, actual);
+    }
+
+    @Test
+    void testValidGetTopLeftNeighbor() {
+        int x = 5;
+        int y = 5;
+        Cell expected = this.board.get(x - 1, y - 1);
+        Cell actual = this.board.getTopLeftNeighbor(x, y);
+        assertSame(expected, actual);
+    }
+
+    @Test
+    void testValidGetTopRightNeighbor() {
+        int x = 5;
+        int y = 5;
+        Cell expected = this.board.get(x + 1, y - 1);
+        Cell actual = this.board.getTopRightNeighbor(x, y);
+        assertSame(expected, actual);
+    }
+
+    @Test
+    void testValidGetBottomLeftNeighbor() {
+        int x = 5;
+        int y = 5;
+        Cell expected = this.board.get(x - 1, y + 1);
+        Cell actual = this.board.getBottomLeftNeighbor(x, y);
+        assertSame(expected, actual);
+    }
+
+    @Test
+    void testValidGetBottomRightNeighbor() {
+        int x = 5;
+        int y = 5;
+        Cell expected = this.board.get(x + 1, y + 1);
+        Cell actual = this.board.getBottomRightNeighbor(x, y);
+        assertSame(expected, actual);
+    }
+
+    @Test
+    void testGetNeighbors() {
     }
 }
