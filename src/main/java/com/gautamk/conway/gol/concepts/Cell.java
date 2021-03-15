@@ -21,4 +21,13 @@ public class Cell {
     public void setAlive(boolean alive) {
         isAlive = alive;
     }
+
+    /**
+     * Toggles the cell's state
+     * Kills the cell, if its alive
+     * Resurrects the cell, if its dead
+     */
+    public void toggle() {
+        this.isAlive = !this.isAlive;
+    }
 }

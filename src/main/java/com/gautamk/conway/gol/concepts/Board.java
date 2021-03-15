@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 public class Board {
     private final int width;
     private final int height;
-    private HashMap<Coordinates, Cell> boardMap;
+    private final HashMap<Coordinates, Cell> boardMap;
 
 
     public Board(int width, int height) {
@@ -122,10 +122,13 @@ public class Board {
     }
 
     Cell put(Coordinates coordinates, Cell cell) {
-        throw new RuntimeException("Not yet implemented");
+        Preconditions.checkNotNull(coordinates);
+        Preconditions.checkNotNull(cell);
+        this.boardMap.put(coordinates, cell);
+        return cell;
     }
 
-    Cell put(int x, int y, Cell cell) {
+    public Cell put(int x, int y, Cell cell) {
         return put(new Coordinates(x, y), cell);
     }
 

@@ -256,15 +256,17 @@ class BoardTest {
     }
 
     @Test
-    void testGetNeighbors() {
-        // Cells with 8 neighbors
+    void testGetCellsWith8Neighbors() {
         for (int x = 1; x < width - 1; x++) {
             for (int y = 1; y < height - 1; y++) {
                 Cell[] neighbors = this.board.getNeighbors(x, y);
                 assertEquals(8, neighbors.length);
             }
         }
-        // Top row
+    }
+
+    @Test
+    void testGetNeighborsTopRow() {
         for (int x : validXValues) {
             Cell[] neighbors = this.board.getNeighbors(x, 0);
             if (x == 0 || x == width - 1) {
@@ -274,7 +276,10 @@ class BoardTest {
             }
         }
 
-        // Bottom row
+    }
+
+    @Test
+    void testGetNeighborsBottomRow() {
         for (int x : validXValues) {
             Cell[] neighbors = this.board.getNeighbors(x, height - 1);
             if (x == 0 || x == width - 1) {
@@ -283,8 +288,10 @@ class BoardTest {
                 assertEquals(5, neighbors.length);
             }
         }
+    }
 
-        // Left most column
+    @Test
+    void testGetNeighborsLeftMostColumn() {
         for (int y : validYValues) {
             Cell[] neighbors = this.board.getNeighbors(0, y);
             if (y == 0 || y == height - 1) {
@@ -293,8 +300,10 @@ class BoardTest {
                 assertEquals(5, neighbors.length);
             }
         }
+    }
 
-        // right most column
+    @Test
+    void testGetNeighborsRightMostColumn() {
         for (int y : validYValues) {
             Cell[] neighbors = this.board.getNeighbors(width - 1, y);
             if (y == 0 || y == height - 1) {
@@ -303,6 +312,44 @@ class BoardTest {
                 assertEquals(5, neighbors.length);
             }
         }
+    }
 
+    @Test
+    void testPut() {
+        int x = random.nextInt(width);
+        int y = random.nextInt(height);
+        Cell cell = this.board.get(x, y);
+        Cell expected = new Cell(!cell.isAlive());
+        this.board.put(x, y, expected);
+        assertSame(expected, this.board.get(x, y));
+    }
+
+    @Test
+    void testNullCoordinatesPut() {
+        assertThrows(NullPointerException.class, () ->
+                this.board.put(null,
+                        new Cell(random.nextBoolean())
+                )
+        );
+    }
+
+    @Test
+    void testNullCellPut() {
+        assertThrows(NullPointerException.class, () ->
+                this.board.put(
+                        random.nextInt(width),
+                        random.nextInt(height),
+                        null)
+        );
+    }
+
+    @Test
+    void testCellPutLiterals() {
+        int x = random.nextInt(width);
+        int y = random.nextInt(height);
+        boolean isAlive = random.nextBoolean();
+        this.board.put(x, y, isAlive);
+        Cell actual = this.board.get(x, y);
+        assertEquals(isAlive, actual.isAlive());
     }
 }

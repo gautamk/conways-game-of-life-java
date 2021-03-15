@@ -40,4 +40,12 @@ class CellTest {
     void testDefaultConstructorDeadCell() {
         assertFalse(new Cell().isAlive());
     }
+
+    @Test
+    void testToggle() {
+        boolean randomIsAlive = random.nextBoolean();
+        Cell cell = new Cell(randomIsAlive);
+        cell.toggle();
+        assertEquals(!randomIsAlive, cell.isAlive());
+    }
 }
