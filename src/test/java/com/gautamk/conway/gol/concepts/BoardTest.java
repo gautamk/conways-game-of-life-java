@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,13 +14,21 @@ class BoardTest {
     private Board board;
     private int width;
     private int height;
+    private int[] validXValues;
+    private int[] validYValues;
+
 
     @BeforeEach
     void setUp() {
         this.random = new Random();
         this.width = 20;
         this.height = 20;
+        this.validXValues = IntStream.range(0, width).toArray();
+        this.validYValues = IntStream.range(0, height).toArray();
         this.board = new Board(width, height);
+        // Make sure validXValues and validYValues are not empty
+        assertNotEquals(0, validXValues.length);
+        assertNotEquals(0, validYValues.length);
     }
 
     @Test
@@ -80,6 +89,14 @@ class BoardTest {
         assertThrows(IllegalArgumentException.class, () -> this.board.get(0, -1));
     }
 
+    @Test
+    void testInvalidGetLeftNeighbor() {
+        for (int y : validYValues) {
+            assertNull(
+                    this.board.getLeftNeighbor(0, y)
+            );
+        }
+    }
 
     @Test
     void testValidGetLeftNeighbor() {
@@ -88,6 +105,15 @@ class BoardTest {
         Cell expected = this.board.get(x - 1, y);
         Cell actual = this.board.getLeftNeighbor(x, y);
         assertSame(expected, actual);
+    }
+
+    @Test
+    void testInvalidGetRightNeighbor() {
+        for (int y : validYValues) {
+            assertNull(
+                    this.board.getRightNeighbor(width - 1, y)
+            );
+        }
     }
 
     @Test
@@ -100,12 +126,30 @@ class BoardTest {
     }
 
     @Test
+    void testInvalidGetTopNeighbor() {
+        for (int x : validXValues) {
+            assertNull(
+                    this.board.getTopNeighbor(x, 0)
+            );
+        }
+    }
+
+    @Test
     void testValidGetTopNeighbor() {
         int x = 5;
         int y = 5;
         Cell expected = this.board.get(x, y - 1);
         Cell actual = this.board.getTopNeighbor(x, y);
         assertSame(expected, actual);
+    }
+
+    @Test
+    void testInvalidGetBottomNeighbor() {
+        for (int x : validXValues) {
+            assertNull(
+                    this.board.getBottomNeighbor(x, height - 1)
+            );
+        }
     }
 
     @Test
@@ -118,12 +162,38 @@ class BoardTest {
     }
 
     @Test
+    void testInvalidGetTopLeftNeighbor() {
+        for (int x : validXValues) {
+            assertNull(
+                    this.board.getTopLeftNeighbor(x, 0)
+            );
+        }
+
+        for (int y : validYValues) {
+            assertNull(
+                    this.board.getTopLeftNeighbor(0, y)
+            );
+        }
+    }
+
+    @Test
     void testValidGetTopLeftNeighbor() {
         int x = 5;
         int y = 5;
         Cell expected = this.board.get(x - 1, y - 1);
         Cell actual = this.board.getTopLeftNeighbor(x, y);
         assertSame(expected, actual);
+    }
+
+    @Test
+    void testInvalidGetTopRightNeighbor() {
+        for (int x : validXValues) {
+            assertNull(this.board.getTopRightNeighbor(x, 0));
+        }
+
+        for (int y : validYValues) {
+            assertNull(this.board.getTopRightNeighbor(width - 1, y));
+        }
     }
 
     @Test
@@ -136,12 +206,44 @@ class BoardTest {
     }
 
     @Test
+    void testInvalidGetBottomLeftNeighbor() {
+        // left most column
+        for (int y : validYValues) {
+            assertNull(
+                    this.board.getBottomLeftNeighbor(0, y)
+            );
+        }
+        // bottom row
+        for (int x : validXValues) {
+            assertNull(
+                    this.board.getBottomLeftNeighbor(x, height - 1)
+            );
+        }
+    }
+
+    @Test
     void testValidGetBottomLeftNeighbor() {
         int x = 5;
         int y = 5;
         Cell expected = this.board.get(x - 1, y + 1);
         Cell actual = this.board.getBottomLeftNeighbor(x, y);
         assertSame(expected, actual);
+    }
+
+    @Test
+    void testInvalidGetBottomRightNeighbor() {
+        // right most column
+        for (int y : validYValues) {
+            assertNull(
+                    this.board.getBottomRightNeighbor(width - 1, y)
+            );
+        }
+        // Bottom Row
+        for (int x : validXValues) {
+            assertNull(
+                    this.board.getBottomRightNeighbor(x, height - 1)
+            );
+        }
     }
 
     @Test
@@ -155,5 +257,52 @@ class BoardTest {
 
     @Test
     void testGetNeighbors() {
+        // Cells with 8 neighbors
+        for (int x = 1; x < width - 1; x++) {
+            for (int y = 1; y < height - 1; y++) {
+                Cell[] neighbors = this.board.getNeighbors(x, y);
+                assertEquals(8, neighbors.length);
+            }
+        }
+        // Top row
+        for (int x : validXValues) {
+            Cell[] neighbors = this.board.getNeighbors(x, 0);
+            if (x == 0 || x == width - 1) {
+                assertEquals(3, neighbors.length);
+            } else {
+                assertEquals(5, neighbors.length);
+            }
+        }
+
+        // Bottom row
+        for (int x : validXValues) {
+            Cell[] neighbors = this.board.getNeighbors(x, height - 1);
+            if (x == 0 || x == width - 1) {
+                assertEquals(3, neighbors.length);
+            } else {
+                assertEquals(5, neighbors.length);
+            }
+        }
+
+        // Left most column
+        for (int y : validYValues) {
+            Cell[] neighbors = this.board.getNeighbors(0, y);
+            if (y == 0 || y == height - 1) {
+                assertEquals(3, neighbors.length);
+            } else {
+                assertEquals(5, neighbors.length);
+            }
+        }
+
+        // right most column
+        for (int y : validYValues) {
+            Cell[] neighbors = this.board.getNeighbors(width - 1, y);
+            if (y == 0 || y == height - 1) {
+                assertEquals(3, neighbors.length);
+            } else {
+                assertEquals(5, neighbors.length);
+            }
+        }
+
     }
 }

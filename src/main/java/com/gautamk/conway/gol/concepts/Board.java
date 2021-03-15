@@ -3,7 +3,9 @@ package com.gautamk.conway.gol.concepts;
 import com.google.common.base.Preconditions;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Board {
@@ -103,7 +105,7 @@ public class Board {
     }
 
     public Cell[] getNeighbors(int x, int y) {
-        return (Cell[]) Stream.of(
+        Stream<Cell> neighbors = Stream.of(
                 getLeftNeighbor(x, y),
                 getRightNeighbor(x, y),
                 getTopNeighbor(x, y),
@@ -111,9 +113,24 @@ public class Board {
                 getBottomLeftNeighbor(x, y),
                 getTopLeftNeighbor(x, y),
                 getTopRightNeighbor(x, y),
-                getBottomLeftNeighbor(x, y),
                 getBottomRightNeighbor(x, y)
-        ).filter(Objects::nonNull).toArray();
+        );
+        List<Cell> collect = neighbors.filter(Objects::nonNull).collect(Collectors.toList());
+        Cell[] cells = new Cell[collect.size()];
+        collect.toArray(cells);
+        return cells;
+    }
+
+    Cell put(Coordinates coordinates, Cell cell) {
+        throw new RuntimeException("Not yet implemented");
+    }
+
+    Cell put(int x, int y, Cell cell) {
+        return put(new Coordinates(x, y), cell);
+    }
+
+    public Cell put(int x, int y, boolean isAlive) {
+        return put(x, y, new Cell(isAlive));
     }
 
     HashMap<Coordinates, Cell> getBoardMap() {
