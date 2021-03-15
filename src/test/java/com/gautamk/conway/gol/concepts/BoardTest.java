@@ -3,6 +3,7 @@ package com.gautamk.conway.gol.concepts;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
 
@@ -259,8 +260,8 @@ class BoardTest {
     void testGetCellsWith8Neighbors() {
         for (int x = 1; x < width - 1; x++) {
             for (int y = 1; y < height - 1; y++) {
-                Cell[] neighbors = this.board.getNeighbors(x, y);
-                assertEquals(8, neighbors.length);
+                List<Cell> neighbors = this.board.getNeighbors(x, y);
+                assertEquals(8, neighbors.size());
             }
         }
     }
@@ -268,11 +269,11 @@ class BoardTest {
     @Test
     void testGetNeighborsTopRow() {
         for (int x : validXValues) {
-            Cell[] neighbors = this.board.getNeighbors(x, 0);
+            List<Cell> neighbors = this.board.getNeighbors(x, 0);
             if (x == 0 || x == width - 1) {
-                assertEquals(3, neighbors.length);
+                assertEquals(3, neighbors.size());
             } else {
-                assertEquals(5, neighbors.length);
+                assertEquals(5, neighbors.size());
             }
         }
 
@@ -281,11 +282,11 @@ class BoardTest {
     @Test
     void testGetNeighborsBottomRow() {
         for (int x : validXValues) {
-            Cell[] neighbors = this.board.getNeighbors(x, height - 1);
+            List<Cell> neighbors = this.board.getNeighbors(x, height - 1);
             if (x == 0 || x == width - 1) {
-                assertEquals(3, neighbors.length);
+                assertEquals(3, neighbors.size());
             } else {
-                assertEquals(5, neighbors.length);
+                assertEquals(5, neighbors.size());
             }
         }
     }
@@ -293,11 +294,11 @@ class BoardTest {
     @Test
     void testGetNeighborsLeftMostColumn() {
         for (int y : validYValues) {
-            Cell[] neighbors = this.board.getNeighbors(0, y);
+            List<Cell> neighbors = this.board.getNeighbors(0, y);
             if (y == 0 || y == height - 1) {
-                assertEquals(3, neighbors.length);
+                assertEquals(3, neighbors.size());
             } else {
-                assertEquals(5, neighbors.length);
+                assertEquals(5, neighbors.size());
             }
         }
     }
@@ -305,11 +306,11 @@ class BoardTest {
     @Test
     void testGetNeighborsRightMostColumn() {
         for (int y : validYValues) {
-            Cell[] neighbors = this.board.getNeighbors(width - 1, y);
+            List<Cell> neighbors = this.board.getNeighbors(width - 1, y);
             if (y == 0 || y == height - 1) {
-                assertEquals(3, neighbors.length);
+                assertEquals(3, neighbors.size());
             } else {
-                assertEquals(5, neighbors.length);
+                assertEquals(5, neighbors.size());
             }
         }
     }

@@ -104,7 +104,7 @@ public class Board {
         }
     }
 
-    public Cell[] getNeighbors(int x, int y) {
+    public List<Cell> getNeighbors(int x, int y) {
         Stream<Cell> neighbors = Stream.of(
                 getLeftNeighbor(x, y),
                 getRightNeighbor(x, y),
@@ -115,10 +115,7 @@ public class Board {
                 getTopRightNeighbor(x, y),
                 getBottomRightNeighbor(x, y)
         );
-        List<Cell> collect = neighbors.filter(Objects::nonNull).collect(Collectors.toList());
-        Cell[] cells = new Cell[collect.size()];
-        collect.toArray(cells);
-        return cells;
+        return neighbors.filter(Objects::nonNull).collect(Collectors.toList());
     }
 
     Cell put(Coordinates coordinates, Cell cell) {
